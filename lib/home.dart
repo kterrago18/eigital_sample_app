@@ -8,14 +8,9 @@ import 'cubit/home/home_screen_cubit.dart';
 import 'cubit/home/home_screen_state.dart';
 import 'cubit/map/map_cubit.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
   static List<Widget> pages = [
     BlocProvider<MapCubit>(
       create: (_) => MapCubit(),
