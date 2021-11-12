@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "990472721025",
+    "project_id": "eigital-sample-app",
+    "storage_bucket": "eigital-sample-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:990472721025:android:d2ab561368a00a263c3380",
+        "android_client_info": {
+          "package_name": "com.example.eigital_sample_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "990472721025-pn8vhqog59fe943dng1lf6hegfijia4e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.eigital_sample_app",
+            "certificate_hash": "2f75052079d19821a572523c93caa2cb6d026ab8"
+          }
+        },
+        {
+          "client_id": "990472721025-92gj6phbgq5289idjuio26i0o047cb2p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9AXUfN4rB0Q-8L8o3gXUHfflW64YIgm4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "990472721025-92gj6phbgq5289idjuio26i0o047cb2p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
