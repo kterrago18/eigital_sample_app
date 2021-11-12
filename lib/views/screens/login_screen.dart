@@ -1,5 +1,7 @@
+import 'package:eigital_sample_app/cubit/home/home_screen_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -76,7 +78,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const HomeScreen(),
+                            builder: (context) => BlocProvider<HomeScreenCubit>(
+                              create: (_) => HomeScreenCubit(),
+                              child: const HomeScreen(),
+                            ),
                           ),
                         );
                         setState(() {
@@ -103,7 +108,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const HomeScreen(),
+                              builder: (context) =>
+                                  BlocProvider<HomeScreenCubit>(
+                                create: (_) => HomeScreenCubit(),
+                                child: const HomeScreen(),
+                              ),
                             ),
                           );
                         },
@@ -123,7 +132,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const HomeScreen(),
+                              builder: (context) =>
+                                  BlocProvider<HomeScreenCubit>(
+                                create: (_) => HomeScreenCubit(),
+                                child: const HomeScreen(),
+                              ),
                             ),
                           );
                         },

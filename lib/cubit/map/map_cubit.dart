@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 
-import 'package:eigital_sample_app/cubit/map_state.dart';
 import 'package:eigital_sample_app/manager/location_manager.dart';
 import 'package:eigital_sample_app/views/res/constants.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
 import 'package:vector_math/vector_math.dart' hide Colors;
+
+import 'map_state.dart';
 
 class MapCubit extends Cubit<MapState> {
   MapCubit() : super(MapLoaded()) {
@@ -81,7 +82,7 @@ class MapCubit extends Cubit<MapState> {
     polylines = {};
   }
 
-  // add markers to map
+  // Add Markers to Map
   Set<Marker> createMarker() {
     return {
       Marker(

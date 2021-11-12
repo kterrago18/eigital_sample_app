@@ -1,5 +1,5 @@
-import 'package:eigital_sample_app/cubit/map_cubit.dart';
-import 'package:eigital_sample_app/cubit/map_state.dart';
+import 'package:eigital_sample_app/cubit/map/map_cubit.dart';
+import 'package:eigital_sample_app/cubit/map/map_state.dart';
 import 'package:eigital_sample_app/views/res/text_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
