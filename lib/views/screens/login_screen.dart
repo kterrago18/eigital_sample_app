@@ -72,21 +72,26 @@ class _LoginScreenState extends State<LoginScreen> {
                         _isLoading = true;
                       });
                       try {
-                        await _auth.signInWithEmailAndPassword(
-                            email: _email, password: _password);
+                        var userCredential =
+                            await _auth.signInWithEmailAndPassword(
+                                email: _email, password: _password);
 
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BlocProvider<HomeScreenCubit>(
-                              create: (_) => HomeScreenCubit(),
-                              child: const HomeScreen(),
+                        if (userCredential != null) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  BlocProvider<HomeScreenCubit>(
+                                create: (_) => HomeScreenCubit(),
+                                child: const HomeScreen(),
+                              ),
                             ),
-                          ),
-                        );
-                        setState(() {
-                          _isLoading = false;
-                        });
+                          );
+                        } else {
+                          setState(() {
+                            _isLoading = false;
+                          });
+                        }
                       } catch (e) {
                         debugPrint("## Email login error: $e");
                       }
@@ -104,17 +109,23 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       RawMaterialButton(
                         onPressed: () async {
-                          await _signInWithGoogle();
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  BlocProvider<HomeScreenCubit>(
-                                create: (_) => HomeScreenCubit(),
-                                child: const HomeScreen(),
+                          var userCredential = await _signInWithGoogle(context);
+                          if (userCredential != null) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    BlocProvider<HomeScreenCubit>(
+                                  create: (_) => HomeScreenCubit(),
+                                  child: const HomeScreen(),
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          } else {
+                            setState(() {
+                              _isLoading = false;
+                            });
+                          }
                         },
                         elevation: 2.0,
                         fillColor: Colors.white,
@@ -128,17 +139,25 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       RawMaterialButton(
                         onPressed: () async {
-                          await _signInWithFacebook(context);
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  BlocProvider<HomeScreenCubit>(
-                                create: (_) => HomeScreenCubit(),
-                                child: const HomeScreen(),
+                          var userCredential =
+                              await _signInWithFacebook(context);
+
+                          if (userCredential != null) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    BlocProvider<HomeScreenCubit>(
+                                  create: (_) => HomeScreenCubit(),
+                                  child: const HomeScreen(),
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          } else {
+                            setState(() {
+                              _isLoading = false;
+                            });
+                          }
                         },
                         elevation: 2.0,
                         fillColor: Colors.white,
@@ -161,7 +180,11 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<void> _signInWithGoogle() async {
+  Future<UserCredential?> _signInWithGoogle(BuildContext context) async {
+    setState(() {
+      _isLoading = true;
+    });
+
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -173,52 +196,14 @@ class _LoginScreenState extends State<LoginScreen> {
         idToken: googleAuth?.idToken,
       );
 
-      await FirebaseAuth.instance.signInWithCredential(googleAuthCredential);
+      return await FirebaseAuth.instance
+          .signInWithCredential(googleAuthCredential);
     } catch (e) {
-      debugPrint("## Gmail login error: $e");
-    }
-  }
-
-  Future _signInWithFacebook(BuildContext context) async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final facebookLoginResult = await FacebookAuth.instance.login();
-
-      final facebookAuthCredential = FacebookAuthProvider.credential(
-          facebookLoginResult.accessToken!.token);
-      await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-    } on FirebaseAuthException catch (e) {
-      var title = '';
-      switch (e.code) {
-        case 'account-exists-with-different-credential':
-          title =
-              'Thrown if there already exists an account with the email address asserted by the credential.';
-          break;
-        case 'invalid-credential':
-          title = 'Thrown if the credential is malformed or has expired.';
-          break;
-        case 'user-disabled':
-          title =
-              'Thrown if the user corresponding to the given credential has been disabled.';
-          break;
-        case 'user-not-found':
-          title =
-              'Thrown if signing in with a credential from [EmailAuthProvider.credential] and there is no user corresponding to the given email.';
-          break;
-        case 'operation-not-allowed':
-          title =
-              'Thrown if the type of account corresponding to the credential is not enabled. Enable the account type in the Firebase Console, under the Auth tab.';
-          break;
-      }
-
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Login in with facebook failed'),
-          content: Text(title),
+          title: const Text('Login in with Google failed'),
+          content: Text(e.toString()),
           actions: [
             TextButton(
               onPressed: () {
@@ -229,10 +214,38 @@ class _LoginScreenState extends State<LoginScreen> {
           ],
         ),
       );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
+    }
+  }
+
+  Future<UserCredential?> _signInWithFacebook(BuildContext context) async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final facebookLoginResult = await FacebookAuth.instance.login();
+
+      final facebookAuthCredential = FacebookAuthProvider.credential(
+          facebookLoginResult.accessToken!.token);
+
+      return await FirebaseAuth.instance
+          .signInWithCredential(facebookAuthCredential);
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Login in with facebook failed'),
+          content: Text(e.toString()),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
     }
   }
 }
