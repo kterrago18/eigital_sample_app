@@ -32,7 +32,10 @@ class HomeScreen extends StatelessWidget {
               'Eigital Sample App',
             ),
           ),
-          body: pages[cubit.selectedIndex],
+          body: IndexedStack(
+            index: cubit.selectedIndex,
+            children: pages,
+          ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: cubit.selectedIndex,
             onTap: (index) {
@@ -40,23 +43,27 @@ class HomeScreen extends StatelessWidget {
             },
             selectedItemColor:
                 Theme.of(context).textSelectionTheme.selectionColor,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.map),
-                label: 'Map',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.article),
-                label: 'News',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.calculate),
-                label: 'Calculator',
-              ),
-            ],
+            items: _buildBottomNavigationBar(),
           ),
         );
       },
     );
+  }
+
+  List<BottomNavigationBarItem> _buildBottomNavigationBar() {
+    return const [
+      BottomNavigationBarItem(
+        icon: Icon(Icons.map),
+        label: 'Map',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.article),
+        label: 'News',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.calculate),
+        label: 'Calculator',
+      ),
+    ];
   }
 }

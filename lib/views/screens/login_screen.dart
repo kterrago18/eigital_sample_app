@@ -230,7 +230,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       return await FirebaseAuth.instance
           .signInWithCredential(facebookAuthCredential);
-    } catch (e) {
+    } on FirebaseAuthException catch (e) {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(

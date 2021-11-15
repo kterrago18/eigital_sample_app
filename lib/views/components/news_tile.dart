@@ -36,152 +36,133 @@ class NewsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(7)),
+        ),
+        child: Column(
+          children: [
+            _buildNewsImage(context),
+            _buildNewsMiddle(),
+            const Divider(),
+            _buildNewsBottom(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNewsMiddle() {
     var unescape = HtmlUnescape();
     return Padding(
-      padding: const EdgeInsets.only(
-        left: 16,
-        right: 16,
-        top: 16,
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: () {
+              _launchURL(url!);
+            },
+            child: Text(
+              title!,
+              style: kSubtitle18TextStyle,
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(unescape.convert(description!), style: kCaption12TextStyle),
+        ],
       ),
-      child: Card(
-        child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(7), color: Colors.white),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  _launchURL(url!);
-                },
-                child: ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(7),
-                      topRight: Radius.circular(7),
-                    ),
-                    child: urlToImage!.isNotEmpty
-                        ? CachedNetworkImage(
-                            fit: BoxFit.fitHeight,
-                            errorWidget: (context, url, error) => Container(
-                              height: 150.0,
-                              child: const Center(
-                                child:
-                                    Icon(Icons.link_off, color: Colors.white60),
-                              ),
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(7),
-                                  topRight: Radius.circular(7),
-                                ),
-                              ),
-                            ),
-                            placeholder: (context, url) => Container(
-                              height: 150.0,
-                              child: const Center(
-                                  child: CircularProgressIndicator()),
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(7),
-                                  topRight: Radius.circular(7),
-                                ),
-                              ),
-                            ),
-                            imageUrl: urlToImage!,
-                          )
-                        : ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(7),
-                              topRight: Radius.circular(7),
-                            ),
-                            child: Container(
-                              height: 150.0,
-                              child: const Center(child: FlutterLogo()),
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(7),
-                                  topRight: Radius.circular(7),
-                                ),
-                              ),
-                            ),
-                          )),
+    );
+  }
+
+  Widget _buildNewsImage(BuildContext context) {
+    return urlToImage!.isNotEmpty
+        ? ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(7),
+              topRight: Radius.circular(7),
+            ),
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 150,
+              child: CachedNetworkImage(
+                fit: BoxFit.fitWidth,
+                errorWidget: (context, url, error) => const Center(
+                  child: Icon(Icons.link_off, color: Colors.white60),
+                ),
+                placeholder: (context, url) =>
+                    const Center(child: CircularProgressIndicator()),
+                imageUrl: urlToImage!,
               ),
-              Container(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            ),
+          )
+        : ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(7),
+              topRight: Radius.circular(7),
+            ),
+            child: Container(
+              height: 150.0,
+              child: const Center(child: FlutterLogo()),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(7),
+                  topRight: Radius.circular(7),
+                ),
+              ),
+            ),
+          );
+  }
+
+  Widget _buildNewsBottom() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        _launchURL(url!);
-                      },
-                      child: Text(
-                        title!,
-                        style: kSubtitle18TextStyle,
-                      ),
+                    Flexible(
+                      fit: FlexFit.loose,
+                      child: Text(name!,
+                          softWrap: false, overflow: TextOverflow.fade),
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(unescape.convert(description!),
-                        style: kCaption12TextStyle),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Divider(),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Flexible(
-                                    fit: FlexFit.loose,
-                                    child: Text(name!,
-                                        softWrap: false,
-                                        overflow: TextOverflow.fade),
-                                  ),
-                                  Flexible(
-                                    fit: FlexFit.loose,
-                                    child: Text('  \u2022  $publishedAt',
-                                        softWrap: false,
-                                        overflow: TextOverflow.fade),
-                                  ),
-                                ],
-                              ),
-                              Text(author!, overflow: TextOverflow.ellipsis),
-                            ],
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Share.share('$title\n\n$url', subject: title);
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.only(left: 20),
-                            child: Icon(
-                              Icons.share,
-                              size: 25,
-                            ),
-                          ),
-                        ),
-                      ],
+                    Flexible(
+                      fit: FlexFit.loose,
+                      child: Text('  \u2022  $publishedAt',
+                          softWrap: false, overflow: TextOverflow.fade),
                     ),
                   ],
                 ),
-              ),
-            ],
+                author!.isNotEmpty
+                    ? Text(author!, overflow: TextOverflow.ellipsis)
+                    : Container()
+              ],
+            ),
           ),
-        ),
+          GestureDetector(
+            onTap: () {
+              Share.share('$title\n\n$url', subject: title);
+            },
+            child: const Icon(
+              Icons.share,
+              size: 25,
+            ),
+          ),
+        ],
       ),
     );
   }

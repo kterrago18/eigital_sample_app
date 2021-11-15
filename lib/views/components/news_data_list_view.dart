@@ -9,7 +9,7 @@ class NewsDataListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
+    return ListView.builder(
       scrollDirection: Axis.vertical,
       itemBuilder: (context, index) {
         return NewsTile(
@@ -21,11 +21,6 @@ class NewsDataListView extends StatelessWidget {
           name: newsData.elementAt(index).name,
           publishedAt:
               TimeAgo().getTimeAgo(newsData.elementAt(index).publishedAt!),
-        );
-      },
-      separatorBuilder: (context, index) {
-        return const SizedBox(
-          height: 16,
         );
       },
       itemCount: newsData.length,
