@@ -107,7 +107,7 @@ class MapCubit extends Cubit<MapState> {
       Constants.googleMapApiKey,
       PointLatLng(currentLocation.latitude, currentLocation.longitude),
       PointLatLng(randomLocation.latitude, randomLocation.longitude),
-      travelMode: TravelMode.transit,
+      travelMode: TravelMode.walking,
     );
 
     if (result.points.isNotEmpty) {
